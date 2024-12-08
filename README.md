@@ -2,6 +2,8 @@
 
 This guide explains how to clone, configure, and run a Linux server hardening script directly from a Git repository.
 
+Feel Free to Edit to your liking. 
+
 ---
 
 ## **Prerequisites**
