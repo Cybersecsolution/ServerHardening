@@ -1,6 +1,6 @@
 # **Linux Server Hardening Script Guide**
 
-This guide explains the steps to create, configure, and run a Linux server hardening script to enhance system security.
+This guide explains how to clone, configure, and run a Linux server hardening script directly from a Git repository.
 
 ---
 
@@ -8,31 +8,34 @@ This guide explains the steps to create, configure, and run a Linux server harde
 Ensure the following:
 - Root or sudo privileges.
 - SSH access or direct server access.
+- `git` is installed on your server.
 
 ---
 
-## **Step 1: Create the Script File**
+## **Step 1: Clone the Script**
 
-### **1. Access Your Server**
-- Use SSH to log in to your server or access it directly.
-
-### **2. Create the Script File**
-Run this command to create a new file named `hardening_script.sh`:
+### **1. Verify Git Installation**
+Ensure `git` is installed:
 ```bash
-nano hardening_script.sh
+sudo apt update && sudo apt install git -y
 ```
 
-### **3. Paste the Script**
-Copy the provided script and paste it into the editor. In the `nano` editor:
-- Use `Ctrl + Shift + V` to paste.
-- Press `Ctrl + O` to save the file.
-- Press `Enter` to confirm.
-- Press `Ctrl + X` to exit.
+### **2. Clone the Repository**
+Clone the hardening script repository:
+```bash
+git clone https://github.com/Cybersecsolution/ServerHardening.git
+```
+
+### **3. Navigate to the Script Directory**
+Move into the cloned repository directory:
+```bash
+cd ServerHardening
+```
 
 ---
 
 ## **Step 2: Make the Script Executable**
-Give the script executable permissions:
+Grant executable permissions to the script:
 ```bash
 chmod +x hardening_script.sh
 ```
@@ -46,18 +49,18 @@ sudo ./hardening_script.sh
 ```
 
 ### **Follow Prompts**
-- Enter `y` or `n` when asked to set a GRUB password.
+- Enter `y` or `n` when prompted for GRUB password setup.
 - Provide a remote syslog server address if applicable.
 
 ---
 
 ## **Step 4: Verify Execution**
 ### **Check Logs**
-- Monitor output during script execution for errors.
-- Address any reported issues.
+- Monitor the terminal output for errors during execution.
+- Review system logs for additional debugging if needed.
 
 ### **Reboot (if Required)**
-Some changes require a reboot:
+Reboot the server if changes necessitate it:
 ```bash
 sudo reboot
 ```
@@ -68,43 +71,48 @@ sudo reboot
 The script includes the following security configurations:
 
 ### **1. System Updates**
-- Updates system packages using `apt`.
+- Updates all system packages.
 
 ### **2. Tool Installation**
-- Installs critical tools: `lynis`, `rkhunter`, `auditd`, `fail2ban`, and `unattended-upgrades`.
+- Installs essential security tools:
+  - `lynis`
+  - `rkhunter`
+  - `auditd`
+  - `fail2ban`
+  - `unattended-upgrades`
 
 ### **3. GRUB Password Protection**
-- Optionally sets a GRUB bootloader password.
+- Optionally secures GRUB bootloader with a password.
 
 ### **4. File System Hardening**
-- Configures `/tmp` and `/var/tmp` with secure mounting options.
+- Adds secure mounting options for `/tmp` and `/var/tmp`.
 
-### **5. Kernel Hardening**
-- Updates kernel parameters for enhanced security.
+### **5. Kernel Parameter Hardening**
+- Enhances security by modifying kernel parameters.
 
 ### **6. AppArmor**
-- Ensures `AppArmor` is installed and active.
+- Ensures `AppArmor` is installed and enabled.
 
 ### **7. Rootkit Hunter**
-- Configures and runs `rkhunter` to scan for rootkits.
+- Configures and runs `rkhunter` for rootkit detection.
 
 ### **8. Auditd**
-- Enables and starts the audit daemon for activity monitoring.
+- Enables the audit daemon for monitoring system activity.
 
 ### **9. Fail2Ban**
-- Installs and configures Fail2Ban to prevent brute-force attacks.
+- Configures Fail2Ban to prevent brute-force attacks.
 
 ### **10. Log Configuration**
-- Configures log rotation and optional remote logging.
+- Sets up log rotation and optional remote logging.
 
 ### **11. Login Banners**
-- Updates login banners to warn unauthorized users.
+- Updates login banners with security warnings.
 
 ### **12. Unattended Upgrades**
-- Enables automatic security updates.
+- Enables automatic installation of security updates.
 
 ### **13. Lynis Audit**
-- Performs a final security audit with Lynis.
+- Performs a detailed security audit using Lynis.
 
 ---
 
@@ -117,42 +125,43 @@ The script includes the following security configurations:
   ```
 
 ### **2. Missing Dependencies**
-- Reinstall required tools:
+- Reinstall missing packages:
   ```bash
   sudo apt install lynis rkhunter auditd fail2ban -y
   ```
 
-### **3. GRUB Configuration Errors**
-- Check `/etc/grub.d/40_custom` and rerun:
+### **3. GRUB Password Errors**
+- Verify and update the GRUB configuration:
   ```bash
-  update-grub
+  sudo update-grub
   ```
 
 ### **4. Logging Issues**
-- Verify `rsyslog` configuration:
+- Restart `rsyslog` to apply changes:
   ```bash
-  systemctl restart rsyslog
+  sudo systemctl restart rsyslog
   ```
 
 ---
 
 ## **Tips**
-1. **Backup Configurations:**
-   - Backup key files before running the script:
+
+1. **Backup Configuration Files:**
+   - Before running the script, back up critical configuration files:
      ```bash
      sudo cp /etc/fstab /etc/fstab.bak
      sudo cp /etc/sysctl.conf /etc/sysctl.conf.bak
      ```
 
-2. **Test on Non-Production Servers:**
-   - Validate the script in a test environment before deploying to production.
+2. **Test in a Non-Production Environment:**
+   - Run the script on a test server to ensure it works as expected.
 
 3. **Review Logs:**
-   - Use system logs (`journalctl`, `/var/log/syslog`) for additional debugging.
+   - Check logs for errors or warnings to address any issues.
 
 ---
 
 ## **Credits**
 - **Author**: Sergio Marquina
 
---- 
+---
